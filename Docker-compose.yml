@@ -3,11 +3,11 @@ version: '3'
 services:
  
   app01:
-    image: app
-    container_name: app_server01
     build:
       context: ./app
       dockerfile: dockerfile
+    image: app
+    container_name: app_server01
     networks: 
       - loadbalance
     ports:
@@ -53,21 +53,21 @@ services:
     depends_on:
      - app01
 
- proxy:
-      image: custom-nginx
-      build:
-        context: ./nginx
-        dockerfile: dockerfile
-      networks:
-        - loadbalance
-      ports:
-        - "8000:80"
-      depends_on:
-        - app01
-        - app02
-        - app03
-        - app04
-        - app05  
+  proxy:
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
+    image: custom-nginx
+    networks:
+      - loadbalance
+    ports:
+      - "8000:80"
+    depends_on:
+      - app01
+      - app02
+      - app03
+      - app04
+      - app05  
 
 
 networks:

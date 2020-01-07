@@ -21,7 +21,7 @@ namespace App.Controllers
 
             Contador.Numero++; 
 
-            return new JsonResult(new { HostName = host.HostName,  contador = Contador.Numero});
+            return new JsonResult(new {host.HostName,  contador = Contador.Numero});
         }
     }
 }
