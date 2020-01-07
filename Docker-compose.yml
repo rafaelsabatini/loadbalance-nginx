@@ -1,0 +1,75 @@
+version: '3'
+        
+services:
+ 
+  app01:
+    image: app
+    container_name: app_server01
+    build:
+      context: ./app
+      dockerfile: dockerfile
+    networks: 
+      - loadbalance
+    ports:
+      - "2001:80"   
+
+  app02:
+    image: app
+    container_name: app_server02
+    networks: 
+      - loadbalance
+    ports:
+     - "2002:80"
+    depends_on:
+     - app01
+
+  app03:
+    image: app
+    container_name: app_server03
+    networks: 
+      - loadbalance
+    ports:
+     - "2003:80"
+    depends_on:
+     - app01   
+  
+  app04:
+    image: app
+    container_name: app_server04
+    networks: 
+      - loadbalance
+    ports:
+     - "2004:80"
+    depends_on:
+     - app01
+  
+  app05:
+    image: app
+    container_name: app_server05
+    networks: 
+      - loadbalance
+    ports:
+     - "2005:80"
+    depends_on:
+     - app01
+
+ proxy:
+      image: custom-nginx
+      build:
+        context: ./nginx
+        dockerfile: dockerfile
+      networks:
+        - loadbalance
+      ports:
+        - "8000:80"
+      depends_on:
+        - app01
+        - app02
+        - app03
+        - app04
+        - app05  
+
+
+networks:
+  loadbalance:
+    driver: bridge
